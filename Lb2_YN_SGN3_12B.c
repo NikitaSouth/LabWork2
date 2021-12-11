@@ -6,7 +6,7 @@ void tableWhile(float, float, float);
 void tableDoWhile(float, float, float);
 void tableFor(float, float, float, int);
 
-static double epsilon = 0.000001;
+static float epsilon = 0.00001;
 
 void main()
 {
@@ -30,9 +30,9 @@ void main()
 		}
 		else {
 			stepSize = (higher - lower) / (stepCount - 1);
-			tableWhile(lower, higher, stepSize);
+			tableWhile(lower, higher, stepSize, stepCount);
 			tableFor(lower, higher, stepSize, stepCount);
-			tableDoWhile(lower, higher, stepSize);
+			tableDoWhile(lower, higher, stepSize, stepCount);
 		}
 	}
 }
@@ -43,13 +43,13 @@ void tableWhile(float lower, float higher, float stepSize)
 	float function = 0;
 	printf("while:\n");
 	printf("x    |");
-	while (fabs(higher - lower) >= epsilon) {
+	while (lower <= higher + epsilon) {
 		printf("%6.3f|", lower);
 		lower = lower + stepSize;
 	}
 	printf("\n");
 	printf("f(x) |");
-	while (fabs(higher - x) >= epsilon) {
+	while (x <= higher + epsilon) {
 		if (x == 0) {
 			printf(" none|");
 			x = x + stepSize;
@@ -72,7 +72,7 @@ void tableDoWhile(float lower, float higher, float stepSize)
 	do {
 		printf("%6.3f|", lower);
 		lower = lower + stepSize;
-	} while (lower <= higher);
+	} while (lower <= higher + epsilon);
 	printf("\n");
 	printf("f(x) |");
 	do {
@@ -85,12 +85,13 @@ void tableDoWhile(float lower, float higher, float stepSize)
 			printf("%6.3f|", function);
 			x = x + stepSize;
 		}
-	} while (x <= higher);
+	} while (x <= higher + epsilon);
 	printf("\n\n");
 }
 
 void tableFor(float lower, float higher, float stepSize, int stepCount)
 {
+	float epsilon = fabs(higher - (lower + stepSize * stepCount));
 	float x = lower;
 	float function = 0;
 	printf("for:\n");
